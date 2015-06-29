@@ -1,33 +1,46 @@
-extern crate sdl2;
+extern crate sfml;
 
-use sdl2::pixels::Color;
-use sdl2::keyboard::Keycode;
-use sdl2::event::Event;
+use sfml::system::Vector2f;
+use sfml::window::{ContextSettings, VideoMode, event, Close};
+use sfml::graphics::{RenderWindow, Texture, RenderTarget, CircleShape, Color};
+
+mod tile;
+use tile::{Tile, TileType};
 
 fn main() {
-    let mut sdl_context = sdl2::init().video().unwrap();
+    let mut window = RenderWindow::new(VideoMode::new_init(800, 600, 32), "Polliquad", Close, &ContextSettings::default()).expect("Window could not be created.");
 
-    let window = sdl_context.window("Polliquad", 800, 600).position_centered().opengl().build().unwrap();
+    let mut circle = CircleShape::new().expect("Error, cannot create ball.");
+    circle.set_radius(30.);
+    circle.set_fill_color(&Color::red());
+    circle.set_position(&Vector2f::new(100., 100.));
 
-    let mut renderer = window.renderer().build().unwrap();
+    let tiles = match Texture::new_from_file("res/tiles.png") {
+        Some(tex) => tex,
+        None => panic!("Cannot find: tiles.png")
+    };
 
-    renderer.set_draw_color(Color::RGB(255, 0, 0));
-    renderer.clear();
-    renderer.present();
+    let grass_tile = Tile::new(200 as f32, 200 as f32, TileType::Grass, &tiles);
+    let road_tile  = Tile::new(200 as f32, 264 as f32, TileType::Road, &tiles);
+    let water_tile = Tile::new(264 as f32, 200 as f32, TileType::Water, &tiles);
 
-    let mut running = true;
-
-    while running {
-        for event in sdl_context.event_pump().poll_iter() {
+    while window.is_open() {
+        for event in window.events() {
             match event {
-                Event::Quit {..} | Event::KeyDown { keycode: Some(Keycode::Escape), .. } => {
-                    running = false
-                },
+                event::Closed => window.close(),
                 _ => {}
             }
         }
 
-        //update
-        //render
+        // Clear the window
+        //window.clear(&Color::new_RGB(0, 200, 200));
+        window.clear(&Color::black());
+        // Draw the shape
+        window.draw(&circle);
+        window.draw(&grass_tile.sprite);
+        window.draw(&road_tile.sprite);
+        window.draw(&water_tile.sprite);
+        // Display things on screen
+        window.display()
     }
 }
