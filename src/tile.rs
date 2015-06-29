@@ -21,7 +21,7 @@ impl<'a> Tile<'a> {
             TileType::Road  => sprite.set_texture_rect(&IntRect::new(32, 0, 32, 32)),
             TileType::Water => sprite.set_texture_rect(&IntRect::new(0, 32, 32, 32)),
         }
-        //sprite.set_texture_rect(&IntRect::new(0, 0, 32, 32));
+
         sprite.set_position2f(x, y);
 
         Tile {

@@ -1,7 +1,7 @@
 extern crate sfml;
 
 use sfml::system::Vector2f;
-use sfml::window::{ContextSettings, VideoMode, event, Close};
+use sfml::window::{ContextSettings, VideoMode, event, Close, keyboard};
 use sfml::graphics::{RenderWindow, Texture, RenderTarget, CircleShape, Color};
 
 mod tile;
@@ -27,6 +27,13 @@ fn main() {
     while window.is_open() {
         for event in window.events() {
             match event {
+                event::KeyPressed{code, ..} => match code {
+                    keyboard::Key::Escape => {
+                        window.close();
+                        break;
+                    },
+                    _ => println!("key pressed: {:?}", code)
+                },
                 event::Closed => window.close(),
                 _ => {}
             }
