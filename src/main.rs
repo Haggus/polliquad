@@ -2,7 +2,7 @@ extern crate sfml;
 
 use sfml::system::Vector2f;
 use sfml::window::{ContextSettings, VideoMode, event, Close, keyboard};
-use sfml::graphics::{RenderWindow, Texture, RenderTarget, CircleShape, Color};
+use sfml::graphics::{RenderWindow, Texture, Sprite, IntRect, RenderTarget, CircleShape, Color};
 
 mod tile;
 mod level;
@@ -26,9 +26,9 @@ fn main() {
         None => panic!("Cannot find: tiles.png")
     };
 
-    let grass_tile = Tile::new(200 as f32, 200 as f32, TileType::Grass, &tiles);
-    let road_tile  = Tile::new(200 as f32, 264 as f32, TileType::Road, &tiles);
-    let water_tile = Tile::new(264 as f32, 200 as f32, TileType::Water, &tiles);
+    let grass_tile = Tile::new(200 as f32, 200 as f32, TileType::Grass);
+    let road_tile  = Tile::new(200 as f32, 264 as f32, TileType::Road);
+    let water_tile = Tile::new(264 as f32, 200 as f32, TileType::Water);
 
     while window.is_open() {
         for event in window.events() {
@@ -45,15 +45,27 @@ fn main() {
             }
         }
 
-        // Clear the window
-        //window.clear(&Color::new_RGB(0, 200, 200));
         window.clear(&Color::black());
-        // Draw the shape
+
         window.draw(&circle);
-        window.draw(&grass_tile.sprite);
-        window.draw(&road_tile.sprite);
-        window.draw(&water_tile.sprite);
-        // Display things on screen
+        render_tile(&mut window, &grass_tile, &tiles);
+        render_tile(&mut window, &road_tile, &tiles);
+        render_tile(&mut window, &water_tile, &tiles);
+
         window.display()
     }
+}
+
+fn render_tile(window: &mut RenderWindow, tile: &Tile, tiles: &Texture) {
+    let mut sprite = Sprite::new().expect("Cannot create new sprite.");
+    sprite.set_texture(tiles, true);
+
+    match tile.kind {
+        TileType::Grass => sprite.set_texture_rect(&IntRect::new(0, 0, 32, 32)),
+        TileType::Road => sprite.set_texture_rect(&IntRect::new(32, 0, 32, 32)),
+        TileType::Water => sprite.set_texture_rect(&IntRect::new(0, 32, 32, 32))
+    }
+
+    sprite.set_position2f(tile.x, tile.y);
+    window.draw(&sprite);
 }

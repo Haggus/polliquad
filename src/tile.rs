@@ -1,8 +1,7 @@
-use sfml::graphics::{Sprite, Texture, IntRect};
-
-pub struct Tile<'a> {
-    kind: TileType,
-    pub sprite: Sprite<'a>
+pub struct Tile {
+    pub x: f32,
+    pub y: f32,
+    pub kind: TileType,
 }
 
 pub enum TileType {
@@ -11,22 +10,12 @@ pub enum TileType {
     Water
 }
 
-impl<'a> Tile<'a> {
-    pub fn new(x: f32, y: f32, t: TileType, texture: &'a Texture) -> Tile<'a> {
-        let mut sprite = Sprite::new().expect("Cannot create a new sprite.");
-        sprite.set_texture(texture, true);
-
-        match t {
-            TileType::Grass => sprite.set_texture_rect(&IntRect::new(0, 0, 32, 32)),
-            TileType::Road  => sprite.set_texture_rect(&IntRect::new(32, 0, 32, 32)),
-            TileType::Water => sprite.set_texture_rect(&IntRect::new(0, 32, 32, 32)),
-        }
-
-        sprite.set_position2f(x, y);
-
+impl Tile {
+    pub fn new(x: f32, y: f32, kind: TileType) -> Tile {
         Tile {
-            kind: t,
-            sprite: sprite
+            x: x,
+            y: y,
+            kind: kind
         }
     }
 }
