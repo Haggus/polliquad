@@ -2,3 +2,6 @@
 name = "polliquad"
 version = "0.1.0"
 authors = ["Mateusz Mrowiec <mateusz.mrowiec@kotrak.com>"]
+
+[dependencies.sdl2]
+git = "https://github.com/AngryLawyer/rust-sdl2"
