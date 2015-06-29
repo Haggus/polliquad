@@ -5,7 +5,11 @@ use sfml::window::{ContextSettings, VideoMode, event, Close, keyboard};
 use sfml::graphics::{RenderWindow, Texture, RenderTarget, CircleShape, Color};
 
 mod tile;
+mod level;
+mod map;
+
 use tile::{Tile, TileType};
+use level::{Level};
 
 fn main() {
     let mut window = RenderWindow::new(VideoMode::new_init(800, 600, 32), "Polliquad", Close, &ContextSettings::default()).expect("Window could not be created.");
@@ -14,6 +18,8 @@ fn main() {
     circle.set_radius(30.);
     circle.set_fill_color(&Color::red());
     circle.set_position(&Vector2f::new(100., 100.));
+
+    let level = Level::new("Level 1");
 
     let tiles = match Texture::new_from_file("res/tiles.png") {
         Some(tex) => tex,
