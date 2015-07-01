@@ -9,7 +9,7 @@ impl Map {
         let mut temp: Vec<Tile> = Vec::new();
 
         //init
-        for i in 0..24 {
+        for i in 0..25 {
             let mut tile = Tile::new(i as f32 * 32.0, 0.0, TileType::Grass);
             temp.push(tile);
             tile = Tile::new(i as f32 * 32.0, 32.0, TileType::Water);
